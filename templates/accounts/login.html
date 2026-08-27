@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="es-mx">
+<head><meta charset="utf-8"><title>CiberEntrena — Iniciar sesión</title></head>
+<body>
+  <h1>CiberEntrena</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Entrar</button>
+  </form>
+  {% if form.errors %}
+    <p>Usuario o contraseña incorrectos.</p>
+  {% endif %}
+</body>
+</html>

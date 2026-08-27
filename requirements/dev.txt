@@ -1,0 +1,10 @@
+-r base.txt
+django-debug-toolbar>=4.4
+ipython>=8.24
+pytest>=8.2
+pytest-django>=4.8
+factory-boy>=3.3
+black>=24.4
+flake8>=7.0
+bandit>=1.7
+pip-audit>=2.7

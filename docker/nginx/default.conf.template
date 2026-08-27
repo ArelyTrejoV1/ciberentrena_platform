@@ -1,0 +1,61 @@
+# Plantilla de Nginx. La imagen oficial de nginx procesa automáticamente
+# cualquier archivo *.template en /etc/nginx/templates/ y sustituye
+# ${PRIMARY_DOMAIN} por el valor de la variable de entorno del mismo
+# nombre (ver docker-compose.prod.yml), generando el .conf real en
+# /etc/nginx/conf.d/. Así no hay que editar este archivo a mano cada
+# vez que cambie el dominio (ej. cuando pases de sslip.io a un dominio
+# propio, solo cambias PRIMARY_DOMAIN en .env).
+
+upstream django_app {
+    server web:8000;
+}
+
+# Redirige todo HTTP a HTTPS, excepto el challenge ACME de certbot.
+server {
+    listen 80;
+    # server_name "_" = único server block del puerto, responde para
+    # cualquier Host (el dominio público Y los subdominios de cada
+    # tenant) — el enrutado real por tenant lo hace django-tenants a
+    # nivel de aplicación, no nginx.
+    server_name _;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name _;
+
+    ssl_certificate     /etc/letsencrypt/live/${PRIMARY_DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${PRIMARY_DOMAIN}/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
+    add_header X-Frame-Options "DENY" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "same-origin" always;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains" always;
+
+    client_max_body_size 10M;
+
+    location /static/ {
+        alias /app/staticfiles/;
+    }
+    location /media/ {
+        alias /app/mediafiles/;
+    }
+
+    location / {
+        proxy_pass http://django_app;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}

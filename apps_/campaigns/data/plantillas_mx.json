@@ -1,0 +1,156 @@
+{
+  "version": "0.1",
+  "descripcion": "Dataset de plantillas base de phishing/ingeniería social simulado, en español mexicano, para uso EXCLUSIVO en campañas de concientización autorizadas (consentimiento explícito de la empresa piloto). No usar fuera de un entorno de capacitación controlado.",
+  "plantillas": [
+    {
+      "clave": "sat_devolucion_01",
+      "canal": "email",
+      "categoria": "sat",
+      "dificultad": "medio",
+      "asunto": "Tienes una devolución pendiente del SAT por ${monto} MXN",
+      "cuerpo": "Estimado(a) {nombre}:\n\nEl Servicio de Administración Tributaria (SAT) ha detectado un saldo a favor de ${monto} MXN a tu nombre correspondiente al ejercicio fiscal {anio}. Para procesar tu devolución antes de que expire el plazo, el {fecha}, es necesario que verifiques tus datos fiscales.\n\nVerifica tu información aquí: {link_falso}\n\nEste trámite debe completarse en las próximas 24 horas o el saldo será cancelado.\n\nAtentamente,\nServicio de Administración Tributaria",
+      "variables": ["nombre", "monto", "anio", "fecha", "link_falso"],
+      "senales_alerta": ["urgencia con plazo de 24 horas", "el SAT no solicita datos por correo", "dominio del link no es gob.mx", "monto genérico no verificado"]
+    },
+    {
+      "clave": "sat_requerimiento_01",
+      "canal": "email",
+      "categoria": "sat",
+      "dificultad": "alto",
+      "asunto": "Requerimiento de información — Buzón Tributario",
+      "cuerpo": "{nombre}, tienes una notificación pendiente en tu Buzón Tributario relacionada con inconsistencias en tu declaración anual. El no atender este requerimiento en {fecha} puede derivar en una multa de ${monto} MXN.\n\nConsulta el detalle aquí: {link_falso}",
+      "variables": ["nombre", "fecha", "monto", "link_falso"],
+      "senales_alerta": ["amenaza de multa", "el buzón tributario real solo se accede desde el portal oficial del SAT", "link acortado o dominio sospechoso"]
+    },
+    {
+      "clave": "banco_bloqueo_01",
+      "canal": "sms",
+      "categoria": "banco",
+      "dificultad": "bajo",
+      "asunto": "",
+      "cuerpo": "{banco}: Detectamos un intento de acceso no autorizado a tu cuenta. Si no fuiste tú, verifica de inmediato: {link_falso}. Si no respondes en 30 min tu tarjeta será bloqueada.",
+      "variables": ["banco", "link_falso"],
+      "senales_alerta": ["urgencia extrema en SMS", "los bancos no piden verificación por link en SMS", "presión de tiempo (30 minutos)"]
+    },
+    {
+      "clave": "banco_transferencia_01",
+      "canal": "whatsapp",
+      "categoria": "banco",
+      "dificultad": "medio",
+      "asunto": "",
+      "cuerpo": "Hola {nombre}, soy {agente_falso} de seguridad de {banco}. Detectamos un cargo de ${monto} MXN no reconocido en tu cuenta. Para cancelarlo necesito que confirmes el código que te llegará por SMS. ¿Me lo puedes compartir?",
+      "variables": ["nombre", "agente_falso", "banco", "monto"],
+      "senales_alerta": ["solicitud directa de código de verificación (nunca se debe compartir)", "contacto no solicitado por WhatsApp", "suplantación de identidad de agente bancario"]
+    },
+    {
+      "clave": "paqueteria_pendiente_01",
+      "canal": "sms",
+      "categoria": "paqueteria",
+      "dificultad": "bajo",
+      "asunto": "",
+      "cuerpo": "{paqueteria}: Tu paquete con guía {guia} no pudo ser entregado por datos incompletos. Actualiza tu dirección aquí: {link_falso} o será devuelto en {fecha}.",
+      "variables": ["paqueteria", "guia", "link_falso", "fecha"],
+      "senales_alerta": ["número de guía genérico no verificable", "dominio no oficial de la paquetería", "urgencia por devolución del paquete"]
+    },
+    {
+      "clave": "paqueteria_pago_01",
+      "canal": "whatsapp",
+      "categoria": "paqueteria",
+      "dificultad": "medio",
+      "asunto": "",
+      "cuerpo": "Hola {nombre}, tu envío de {paqueteria} está retenido en aduana. Se requiere un pago de ${monto} MXN por gastos de manejo. Realiza el pago aquí para liberar tu paquete: {link_falso}",
+      "variables": ["nombre", "paqueteria", "monto", "link_falso"],
+      "senales_alerta": ["pago inesperado para 'liberar' un paquete", "link de pago no oficial", "monto arbitrario"]
+    },
+    {
+      "clave": "oxxo_premio_01",
+      "canal": "sms",
+      "categoria": "oxxo",
+      "dificultad": "bajo",
+      "asunto": "",
+      "cuerpo": "¡Felicidades {nombre}! Ganaste ${monto} en la rifa OXXO Premia por tu compra reciente. Reclama tu premio antes del {fecha}: {link_falso}",
+      "variables": ["nombre", "monto", "fecha", "link_falso"],
+      "senales_alerta": ["premio no solicitado", "presión de fecha límite", "solicitud posterior de datos personales/bancarios"]
+    },
+    {
+      "clave": "oxxo_recarga_01",
+      "canal": "whatsapp",
+      "categoria": "oxxo",
+      "dificultad": "bajo",
+      "asunto": "",
+      "cuerpo": "Hola {nombre}, tu recarga de ${monto} en Oxxo no se reflejó correctamente. Para procesarla, ingresa tu número de tarjeta y CVV aquí: {link_falso}",
+      "variables": ["nombre", "monto", "link_falso"],
+      "senales_alerta": ["solicitud directa de CVV (nunca debe pedirse así)", "canal no oficial de soporte", "urgencia de 'recarga fallida'"]
+    },
+    {
+      "clave": "prestamo_preaprobado_01",
+      "canal": "email",
+      "categoria": "prestamo",
+      "dificultad": "medio",
+      "asunto": "{nombre}, tienes un préstamo pre-aprobado de ${monto} MXN",
+      "cuerpo": "Estimado(a) {nombre}:\n\nPor tu historial, has sido pre-aprobado para un préstamo de ${monto} MXN a una tasa preferencial. Solo necesitamos validar tu identidad para depositar los fondos en un plazo de {fecha}.\n\nCompleta tu solicitud aquí: {link_falso}",
+      "variables": ["nombre", "monto", "fecha", "link_falso"],
+      "senales_alerta": ["oferta no solicitada", "presión de plazo para 'no perder' el préstamo", "solicitud de datos bancarios completos"]
+    },
+    {
+      "clave": "rh_nomina_01",
+      "canal": "email",
+      "categoria": "rh_nomina",
+      "dificultad": "alto",
+      "asunto": "Actualización urgente de datos bancarios para nómina",
+      "cuerpo": "Hola {nombre},\n\nDebido a un cambio en el proveedor de nómina de {empresa}, es necesario que actualices tus datos bancarios antes del {fecha} para evitar retrasos en tu próximo pago.\n\nActualiza aquí: {link_falso}\n\nSaludos,\nRecursos Humanos",
+      "variables": ["nombre", "empresa", "fecha", "link_falso"],
+      "senales_alerta": ["suplantación de RH interno", "solicitud de datos bancarios por correo", "urgencia ligada a la nómina/sueldo"]
+    },
+    {
+      "clave": "rh_directorio_01",
+      "canal": "email",
+      "categoria": "rh_nomina",
+      "dificultad": "medio",
+      "asunto": "Actualización del directorio de empleados {empresa}",
+      "cuerpo": "Hola {nombre}, estamos actualizando el directorio interno de {departamento}. Por favor confirma tus datos de acceso aquí: {link_falso} antes del {fecha}.",
+      "variables": ["nombre", "empresa", "departamento", "fecha", "link_falso"],
+      "senales_alerta": ["solicitud de credenciales de acceso disfrazada de trámite administrativo", "remitente no verificado de RH"]
+    },
+    {
+      "clave": "soporte_ti_01",
+      "canal": "whatsapp",
+      "categoria": "servicio_tecnico",
+      "dificultad": "alto",
+      "asunto": "",
+      "cuerpo": "Hola {nombre}, soy {agente_falso} de soporte TI de {empresa}. Detectamos actividad inusual en tu cuenta de correo. Necesito que me compartas el código que te llegará por SMS para verificar tu identidad y evitar que se bloquee tu acceso.",
+      "variables": ["nombre", "agente_falso", "empresa"],
+      "senales_alerta": ["suplantación de TI interno", "solicitud de código de verificación (nunca compartir)", "contacto no solicitado por WhatsApp"]
+    },
+    {
+      "clave": "factura_electronica_01",
+      "canal": "email",
+      "categoria": "factura_electronica",
+      "dificultad": "medio",
+      "asunto": "Tu factura electrónica (CFDI) no pudo timbrarse",
+      "cuerpo": "Estimado(a) {nombre}:\n\nLa factura CFDI folio {folio} por ${monto} MXN no pudo ser timbrada ante el SAT por un error en tus datos fiscales. Corrige la información antes del {fecha} para evitar recargos.\n\nCorrige aquí: {link_falso}",
+      "variables": ["nombre", "folio", "monto", "fecha", "link_falso"],
+      "senales_alerta": ["folio de factura no verificable", "amenaza de recargos", "el SAT no gestiona timbrado por links externos a terceros"]
+    },
+    {
+      "clave": "premio_rifa_01",
+      "canal": "sms",
+      "categoria": "premio_rifa",
+      "dificultad": "bajo",
+      "asunto": "",
+      "cuerpo": "{nombre}, fuiste seleccionado(a) para un premio de ${monto} MXN por participación digital. Regístrate antes del {fecha} para reclamarlo: {link_falso}",
+      "variables": ["nombre", "monto", "fecha", "link_falso"],
+      "senales_alerta": ["premio no solicitado", "registro previo requerido para 'reclamar'", "presión de tiempo"]
+    },
+    {
+      "clave": "whatsapp_soporte_bancario_01",
+      "canal": "whatsapp",
+      "categoria": "banco",
+      "dificultad": "alto",
+      "asunto": "",
+      "cuerpo": "Buenas tardes {nombre}, le escribo del área de fraudes de {banco}. Registramos un intento de compra por ${monto} MXN en un comercio no reconocido. Si usted no realizó esta compra, por seguridad necesito confirmar su NIP para bloquear la transacción de inmediato.",
+      "variables": ["nombre", "banco", "monto"],
+      "senales_alerta": ["solicitud de NIP (nunca debe compartirse, ni con el banco real)", "tono de urgencia y autoridad", "contacto no solicitado"]
+    }
+  ]
+}
