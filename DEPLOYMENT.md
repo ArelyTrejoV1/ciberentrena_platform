@@ -257,7 +257,7 @@ pruebas, no producción.
 cd ~/ciberentrena_platform
 docker compose up --build -d
 ```
-
+<!-- ok arely 27082026 -->
 La primera vez tarda varios minutos (construye las imágenes). Verifica
 que todo esté corriendo:
 
@@ -319,7 +319,9 @@ cd ~/ciberentrena_platform
 docker compose exec web python manage.py bootstrap_tenants --piloto
 
 # Superusuario para el tenant piloto (te pedirá usuario/correo/contraseña)
-docker compose exec web python manage.py tenant_command createsuperuser --schema=pyme_piloto
+# docker compose exec web python manage.py tenant_command createsuperuser --schema=pyme_piloto
+# no se xq el de arriba no me funciono
+docker exec -it ciberentrena_platform-web-1 python manage.py createsuperuser
 
 
 #Nombre de usuario: admin
@@ -327,7 +329,7 @@ docker compose exec web python manage.py tenant_command createsuperuser --schema
 #Password:
 #Password (again):
 #Error: Your passwords didn't match.
-#Password:
+#Password:ICELABRA1abc.
 #Password (again):
 #La contraseña es muy similar a  nombre de usuario.
 #La contraseña es muy corta. Debe contener al menos 12 caracteres.
@@ -352,6 +354,7 @@ deberías ver las plantillas, la campaña demo y el score de riesgo
 (si diste de alta empleados con `PerfilEmpleado`).
 
 ---
+<!-- Me quedè aquì no puedo iniciar sesion -->
 
 ## Paso 10 — Troubleshooting básico
 
