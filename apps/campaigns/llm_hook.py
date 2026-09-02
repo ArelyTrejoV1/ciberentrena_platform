@@ -16,12 +16,17 @@ from .generator import VariationEngine
 
 class LLMProvider(ABC):
     @abstractmethod
-    def generar(self, plantilla, perfil_empleado) -> tuple[Optional[str], str]:
+    def generar(
+        self, plantilla, perfil_empleado
+    ) -> tuple[Optional[str], str, Optional[str]]:
+        """Devuelve (asunto, cuerpo, link_falso_visible)."""
         raise NotImplementedError
 
 
 class RuleBasedProvider(LLMProvider):
-    def __init__(self, seed: int = None, dominio_links: str = "simulacro-ciberentrena.local"):
+    def __init__(
+        self, seed: int = None, dominio_links: str = "simulacro-ciberentrena.local"
+    ):
         self.engine = VariationEngine(seed=seed, dominio_links=dominio_links)
 
     def generar(self, plantilla, perfil_empleado):
@@ -41,7 +46,9 @@ class ClaudeProvider(LLMProvider):
         import anthropic
 
         engine = VariationEngine()
-        asunto_base, cuerpo_base = engine.generar_variacion(plantilla, perfil_empleado)
+        asunto_base, cuerpo_base, link_falso = engine.generar_variacion(
+            plantilla, perfil_empleado
+        )
 
         client = anthropic.Anthropic(api_key=self.api_key)
         prompt = (
@@ -50,6 +57,8 @@ class ClaudeProvider(LLMProvider):
             f"redacción distinta:\n\nAsunto: {asunto_base}\nCuerpo: {cuerpo_base}"
         )
         respuesta = client.messages.create(
-            model=self.modelo, max_tokens=400, messages=[{"role": "user", "content": prompt}]
+            model=self.modelo,
+            max_tokens=400,
+            messages=[{"role": "user", "content": prompt}],
         )
-        return asunto_base, respuesta.content[0].text
+        return asunto_base, respuesta.content[0].text, link_falso

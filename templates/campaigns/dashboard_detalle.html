@@ -1,0 +1,40 @@
+{% extends "campaigns/dashboard_base.html" %}
+{% block titulo %}{{ campana.nombre }} — CiberEntrena{% endblock %}
+{% block contenido %}
+  <p><a href="{% url 'dashboard:lista' %}">&larr; Volver a campañas</a></p>
+  <h1>{{ campana.nombre }}</h1>
+
+  <div class="tarjeta">
+    <strong>{{ total }}</strong> mensajes &middot;
+    <strong>{{ tasa_apertura }}%</strong> abrieron &middot;
+    <strong>{{ tasa_clic }}%</strong> cayeron (hicieron clic) &middot;
+    <strong>{{ tasa_dato }}%</strong> llegaron a "enviar" datos en la página falsa
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Empleado</th>
+        <th>Departamento</th>
+        <th>Plantilla</th>
+        <th>Enviado</th>
+        <th>Abrió</th>
+        <th>Cayó</th>
+        <th>Envió datos</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in mensajes %}
+        <tr>
+          <td>{{ m.empleado.usuario.get_full_name|default:m.empleado.usuario.username }}</td>
+          <td>{{ m.empleado.departamento }}</td>
+          <td>{{ m.plantilla.clave }}</td>
+          <td>{% if m.enviado_en %}{{ m.enviado_en|date:"d/m H:i" }}{% else %}<span class="badge pendiente">—</span>{% endif %}</td>
+          <td>{% if m.abierto %}<span class="badge si">Sí</span>{% else %}<span class="badge no">No</span>{% endif %}</td>
+          <td>{% if m.cayo %}<span class="badge si">Sí</span>{% elif m.cayo is None %}<span class="badge pendiente">—</span>{% else %}<span class="badge no">No</span>{% endif %}</td>
+          <td>{% if m.dato_ingresado %}<span class="badge si">Sí</span>{% else %}<span class="badge no">No</span>{% endif %}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

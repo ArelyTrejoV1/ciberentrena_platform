@@ -23,7 +23,9 @@ class VariationEngine:
         "antes de que expire": ["antes de que venza", "antes de que se agote"],
     }
 
-    def __init__(self, seed: int = None, dominio_links: str = "simulacro-ciberentrena.local"):
+    def __init__(
+        self, seed: int = None, dominio_links: str = "simulacro-ciberentrena.local"
+    ):
         self._rng = random.Random(seed)
         self.dominio_links = dominio_links
 
@@ -40,7 +42,11 @@ class VariationEngine:
             f"verificacion-{categoria}.{self.dominio_links}",
             f"portal-{categoria}-mx.{self.dominio_links}",
         ]
-        return "https://" + self._rng.choice(dominios) + f"/{self._rng.randint(1000, 9999)}"
+        return (
+            "https://"
+            + self._rng.choice(dominios)
+            + f"/{self._rng.randint(1000, 9999)}"
+        )
 
     def _guia(self) -> str:
         return "".join(self._rng.choices("0123456789", k=10))
@@ -57,7 +63,8 @@ class VariationEngine:
     def rellenar_variables(self, plantilla, perfil_empleado) -> dict:
         categoria = plantilla.categoria
         return {
-            "nombre": perfil_empleado.usuario.get_full_name() or perfil_empleado.usuario.username,
+            "nombre": perfil_empleado.usuario.get_full_name()
+            or perfil_empleado.usuario.username,
             "empresa": getattr(perfil_empleado.usuario, "empresa_nombre", "tu empresa"),
             "departamento": perfil_empleado.departamento or "General",
             "monto": self._monto(),
@@ -71,7 +78,12 @@ class VariationEngine:
             "folio": self._folio(),
         }
 
-    def generar_variacion(self, plantilla, perfil_empleado) -> tuple[Optional[str], str]:
+    def generar_variacion(
+        self, plantilla, perfil_empleado
+    ) -> tuple[Optional[str], str, Optional[str]]:
+        """Devuelve (asunto, cuerpo, link_falso). link_falso es None si la
+        plantilla no usa esa variable (ej. algunas de SMS/WhatsApp) — en
+        ese caso no hay nada que enmascarar con el enlace de tracking."""
         valores = self.rellenar_variables(plantilla, perfil_empleado)
 
         def render(texto: Optional[str]) -> Optional[str]:
@@ -82,4 +94,9 @@ class VariationEngine:
                 out = out.replace("{" + var + "}", str(val))
             return self._aplicar_sinonimos(out)
 
-        return render(plantilla.asunto), render(plantilla.cuerpo)
+        link_falso = (
+            valores["link_falso"]
+            if "link_falso" in (plantilla.variables or [])
+            else None
+        )
+        return render(plantilla.asunto), render(plantilla.cuerpo), link_falso

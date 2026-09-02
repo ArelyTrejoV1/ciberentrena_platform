@@ -155,6 +155,13 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
+# Usados para armar los enlaces de tracking dentro de un correo de
+# campaña (apps.core.site_url) — no hay "request" disponible cuando el
+# envío ocurre desde una tarea de Celery, así que no podemos apoyarnos
+# en request.build_absolute_uri() como en una vista normal.
+SITE_URL_SCHEME = env("SITE_URL_SCHEME", default="https")
+SITE_URL_PORT = env("SITE_URL_PORT", default="")
+
 EMAIL_HOST = env("EMAIL_HOST", default="")
 EMAIL_PORT = env.int("EMAIL_PORT", default=587)
 EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")

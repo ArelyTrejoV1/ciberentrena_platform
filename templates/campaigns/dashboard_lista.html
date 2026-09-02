@@ -1,0 +1,45 @@
+{% extends "campaigns/dashboard_base.html" %}
+{% block titulo %}Campañas — CiberEntrena{% endblock %}
+{% block contenido %}
+  <h1>Campañas de simulacro</h1>
+
+  {% if not filas %}
+    <div class="tarjeta">
+      Todavía no hay campañas en este tenant. Genera una con
+      <code>python manage.py tenant_command generar_campana_demo --schema=&lt;tu-schema&gt;</code>.
+    </div>
+  {% else %}
+    <table>
+      <thead>
+        <tr>
+          <th>Campaña</th>
+          <th>Ronda</th>
+          <th>Creada</th>
+          <th>Enviada</th>
+          <th>Apertura</th>
+          <th>Cayó (clic)</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for fila in filas %}
+          <tr>
+            <td>{{ fila.campana.nombre }}</td>
+            <td>{{ fila.campana.ronda }}</td>
+            <td>{{ fila.campana.fecha_creacion|date:"d/m/Y H:i" }}</td>
+            <td>{% if fila.campana.fecha_envio %}{{ fila.campana.fecha_envio|date:"d/m/Y H:i" }}{% else %}<span class="badge pendiente">sin enviar</span>{% endif %}</td>
+            <td>
+              <span class="barra-fondo"><span class="barra" style="width: {{ fila.tasa_apertura }}%"></span></span>
+              <span class="pct">{{ fila.tasa_apertura }}%</span>
+            </td>
+            <td>
+              <span class="barra-fondo"><span class="barra" style="width: {{ fila.tasa_clic }}%"></span></span>
+              <span class="pct">{{ fila.tasa_clic }}%</span>
+            </td>
+            <td><a class="boton" href="{% url 'dashboard:detalle' fila.campana.id %}">Ver detalle</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endblock %}

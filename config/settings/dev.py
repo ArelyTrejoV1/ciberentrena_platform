@@ -18,6 +18,11 @@ EMAIL_HOST = "mailhog"
 EMAIL_PORT = 1025
 EMAIL_USE_TLS = False
 
+# En dev los tenants usan hostnames tipo "pyme-piloto.localhost" servidos
+# por runserver en el puerto 8000, sin TLS.
+SITE_URL_SCHEME = "http"
+SITE_URL_PORT = "8000"
+
 # En dev sí queremos ver todo el detalle
 LOGGING["root"]["level"] = "DEBUG"  # noqa: F405
 
