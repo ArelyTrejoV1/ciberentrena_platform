@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es-mx">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Esto fue un simulacro — CiberEntrena</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; background: #0f2027; margin: 0; padding: 0; color: #eee; }
+    .caja { max-width: 480px; margin: 50px auto; background: #16323f; border-radius: 8px;
+            padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+    .icono { font-size: 40px; text-align: center; }
+    h1 { text-align: center; font-size: 22px; margin: 10px 0 4px; color: #ffd166; }
+    p.sub { text-align: center; color: #cfd8dc; font-size: 14px; margin-top: 0; }
+    h2 { font-size: 15px; margin-top: 28px; color: #fff; border-bottom: 1px solid #2c4a58; padding-bottom: 6px; }
+    ul { padding-left: 20px; }
+    li { margin-bottom: 8px; font-size: 14px; line-height: 1.4; color: #dcdcdc; }
+    .tranquilidad { margin-top: 24px; background: #12242c; border-radius: 6px; padding: 14px 16px;
+                    font-size: 13px; color: #a9c9d6; }
+    .pie { text-align: center; font-size: 11px; color: #6d8896; margin-top: 24px; }
+  </style>
+</head>
+<body>
+  <div class="caja">
+    <div class="icono">🎣</div>
+    <h1>¡Esto fue un simulacro de phishing!</h1>
+    <p class="sub">No se guardó ningún dato que hayas escrito. Fue un ejercicio de {{ plantilla.categoria|title }} para practicar cómo detectar estos intentos.</p>
+
+    <h2>Señales de alerta que tenía este mensaje</h2>
+    <ul>
+      {% for senal in plantilla.senales_alerta %}
+        <li>{{ senal }}</li>
+      {% empty %}
+        <li>Revisa siempre el remitente, el dominio del enlace y la urgencia del mensaje.</li>
+      {% endfor %}
+    </ul>
+
+    <div class="tranquilidad">
+      No pasa nada: a esto se dedica este ejercicio, a que la próxima vez lo
+      identifiques antes de dar clic. Ante un mensaje real así, repórtalo a tu
+      equipo de TI o al área que lo emitió (banco, SAT, RH) por su canal oficial
+      — nunca por el link del mensaje.
+    </div>
+
+    <div class="pie">CiberEntrena — simulacro autorizado por tu empresa</div>
+  </div>
+</body>
+</html>

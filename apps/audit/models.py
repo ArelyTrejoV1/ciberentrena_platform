@@ -23,6 +23,9 @@ class RegistroAuditoria(models.Model):
     ACCION_CAMPANA_ENVIADA = "campana_enviada"
     ACCION_EXPORTACION_DATOS = "exportacion_datos"
     ACCION_CAMBIO_ROL = "cambio_rol"
+    ACCION_SIMULACRO_APERTURA = "simulacro_apertura"
+    ACCION_SIMULACRO_CLIC = "simulacro_clic"
+    ACCION_SIMULACRO_DATO_INGRESADO = "simulacro_dato_ingresado"
     ACCION_CHOICES = [
         (ACCION_LOGIN_EXITOSO, "Login exitoso"),
         (ACCION_LOGIN_FALLIDO, "Login fallido"),
@@ -30,6 +33,9 @@ class RegistroAuditoria(models.Model):
         (ACCION_CAMPANA_ENVIADA, "Campaña enviada"),
         (ACCION_EXPORTACION_DATOS, "Exportación de datos"),
         (ACCION_CAMBIO_ROL, "Cambio de rol"),
+        (ACCION_SIMULACRO_APERTURA, "Empleado abrió un simulacro"),
+        (ACCION_SIMULACRO_CLIC, "Empleado hizo clic en un simulacro (cayó)"),
+        (ACCION_SIMULACRO_DATO_INGRESADO, "Empleado envió datos en la página falsa"),
     ]
 
     usuario = models.ForeignKey(

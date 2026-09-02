@@ -179,6 +179,53 @@ ve afectada.
   producción y métricas (Prometheus/Grafana) — documentado como
   siguiente paso, no bloqueante para el piloto.
 
+## 9bis. Fase 2 — envío real, tracking y dashboard
+
+Lo que faltaba (marcado como TODO en el código) para pasar del
+prototipo de Fase 1 a una plataforma que realmente envía, mide y
+reporta simulacros:
+
+- **`apps/campaigns/sending.py`**: envío real por SMTP (Brevo en el
+  piloto). Por cada `MensajeCampana` con `canal=email` y empleado con
+  correo registrado, arma un correo HTML: el texto generado en Fase 1
+  queda igual, pero el `link_falso_visible` que el empleado VE se
+  enmascara con un `<a href>` real apuntando al endpoint de tracking
+  (mismo truco que un ataque real), y se agrega un pixel de 1x1 al
+  final. SMS/WhatsApp (Twilio) siguen sin implementarse — se priorizó
+  tener el flujo completo funcionando con un solo canal a tiempo.
+- **`apps/campaigns/tracking.py` + `tracking_urls.py`** (rutas `/t/...`,
+  públicas, sin login): `/t/o/<token>.gif` marca `abierto`; `/t/c/<token>/`
+  marca `cayo` y muestra una página que imita el engaño (nunca pide
+  contraseñas reales) — si el empleado la "envía", se marca
+  `dato_ingresado` SIN leer ni guardar lo que escribió, y se le muestra
+  de inmediato la revelación educativa con las `señales_alerta` de esa
+  plantilla específica. Esto también cumple, de forma económica, la
+  parte de "capacitación dirigida a quien cayó" del proyecto original.
+- **`apps/campaigns/dashboard.py` + `dashboard_urls.py`** (rutas
+  `/dashboard/...`, requieren rol `admin_pyme`/`superadmin`): lista de
+  campañas con tasa de apertura/clic, detalle por empleado, y una vista
+  comparativa por `ronda` (nuevo campo en `Campana`) para medir
+  antes/después de una capacitación, tal como pide el roadmap.
+- **`apps/core/site_url.py`**: arma la URL pública del tenant actual a
+  partir de su `Dominio` primario — necesario porque el envío real
+  puede ocurrir desde una tarea de Celery, que no tiene un `request` del
+  que sacar el host.
+
+Tres bugs que bloqueaban esto y se corrigieron en el mismo trabajo:
+
+1. La carpeta del código vivía como `apps_/` en el repo (con `apps/`
+   vacía) mientras todo el código importa `apps.algo` — el proyecto no
+   podía arrancar. Se renombró `apps_` → `apps`.
+2. `Campana.creada_por` no tenía `blank=True`, así que `full_clean()`
+   rechazaba una campaña generada por un comando/tarea (sin usuario
+   humano) aunque la base de datos sí lo permitía — este era
+   exactamente el error donde te quedaste el 23 de julio.
+3. `django-debug-toolbar` estaba activo en `INSTALLED_APPS`/`MIDDLEWARE`
+   de `dev.py` pero sus URLs nunca se registraron en `config/urls.py` —
+   cualquier página en modo desarrollo tronaba con
+   `NoReverseMatch('djdt')`. Se agregó el bloque `if settings.DEBUG`
+   correspondiente.
+
 ## 9. Qué NO se decidió todavía (pendiente de tu servidor real)
 
 Cuando confirmes specs del servidor (RAM/vCPU/distro), ajustamos:

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es-mx">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Verificación de cuenta</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; background: #f2f2f2; margin: 0; padding: 0; }
+    .caja { max-width: 420px; margin: 60px auto; background: #fff; border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15); padding: 32px; }
+    .encabezado { text-align: center; margin-bottom: 24px; }
+    .encabezado .categoria { color: #b00020; font-size: 13px; text-transform: uppercase;
+                              letter-spacing: 1px; font-weight: bold; }
+    h1 { font-size: 20px; margin: 8px 0 0; color: #222; }
+    p.aviso { color: #444; font-size: 14px; line-height: 1.5; }
+    label { display: block; margin-top: 14px; font-size: 13px; color: #333; }
+    input[type=text], input[type=password] {
+      width: 100%; box-sizing: border-box; padding: 10px; margin-top: 4px;
+      border: 1px solid #ccc; border-radius: 4px; font-size: 14px;
+    }
+    button { margin-top: 22px; width: 100%; padding: 12px; background: #b00020; color: #fff;
+              border: none; border-radius: 4px; font-size: 15px; cursor: pointer; }
+    .pie { text-align: center; font-size: 11px; color: #999; margin-top: 18px; }
+  </style>
+</head>
+<body>
+  <div class="caja">
+    <div class="encabezado">
+      <div class="categoria">{{ plantilla.categoria|title }}</div>
+      <h1>Confirma tus datos para continuar</h1>
+    </div>
+    <p class="aviso">
+      Para evitar la suspensión de tu trámite, confirma la información
+      solicitada a continuación.
+    </p>
+    <form method="post">
+      {% csrf_token %}
+      <label>Nombre completo
+        <input type="text" name="nombre_simulado" autocomplete="off">
+      </label>
+      <label>Número de referencia / cuenta
+        <input type="text" name="referencia_simulada" autocomplete="off">
+      </label>
+      <button type="submit">Verificar mis datos</button>
+    </form>
+    <div class="pie">Este es un ejercicio interno de concientización — CiberEntrena</div>
+  </div>
+</body>
+</html>

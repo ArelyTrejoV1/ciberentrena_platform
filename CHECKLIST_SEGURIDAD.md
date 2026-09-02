@@ -68,14 +68,27 @@ convertido a produccion, ver PRODUCCION.md).
       Enrolar cada cuenta `superadmin`/`admin_pyme` con
       `crear_dispositivo_2fa` + `confirmar_dispositivo_2fa` ANTES de
       darle acceso (ver PRODUCCION.md paso 6).
-- [ ] Confirma que `consentimiento_explicito` de cada `Campana` quede
-      registrado y no se pueda editar sin dejar rastro en auditoria.
-- [ ] Verifica que ningun endpoint exponga `cuerpo_final` de mensajes u
-      otros datos de empleados a un rol que no deberia verlos
-      (revisar permisos de cada ViewSet antes de agregar mas).
-- [ ] Nunca almacenes contraseñas/credenciales reales que un empleado
-      "capturado" haya ingresado en una pagina de simulacro (Fase 2) —
-      registra unicamente que ocurrio el evento, no el valor ingresado.
+- [x] `consentimiento_explicito` de cada `Campana` se valida en
+      `Campana.clean()` Y en `services.crear_campana()` (doble check) —
+      no se puede crear ni enviar una campaña sin él.
+- [x] El dashboard de resultados (`apps.campaigns.dashboard`, Fase 2)
+      exige rol `admin_pyme`/`superadmin` (`requiere_rol`) — un
+      empleado normal recibe 403, verificado con pruebas manuales.
+- [x] **Implementado en Fase 2** (`apps/campaigns/tracking.py`): la
+      página falsa de captura NUNCA lee ni guarda `request.POST` — solo
+      registra el booleano `dato_ingresado` + la hora. Ver el comentario
+      explícito en el código antes de la vista de POST.
+- [ ] Verifica que ningun endpoint de la API (`apps.campaigns.views`,
+      `apps.scoring.views`) exponga `cuerpo_final` de mensajes u otros
+      datos de empleados a un rol que no deberia verlos — revisar
+      permisos de cada ViewSet antes de agregar mas.
+- [ ] Los enlaces de tracking (`/t/o/<token>.gif`, `/t/c/<token>/`) usan
+      un UUID impredecible como identificador — no se expone el id
+      numérico interno. Aun así, no hay rate-limiting en estos
+      endpoints públicos: antes de un piloto con más de un puñado de
+      empleados, considera `django-ratelimit` (ya está en
+      requirements) también aquí, para que alguien no pueda "adivinar"
+      tokens por fuerza bruta.
 
 ## 6. Dependencias y codigo
 
