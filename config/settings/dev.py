@@ -11,12 +11,17 @@ INSTALLED_APPS = INSTALLED_APPS + ["debug_toolbar"]
 MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE
 INTERNAL_IPS = ["127.0.0.1"]
 
-# Los correos se ven en la UI de MailHog (http://localhost:8025), nunca
-# salen a internet — evita mandar correos reales por accidente en dev.
+# Por default los correos se ven en la UI de MailHog (http://localhost:8025)
+# y nunca salen a internet, para no mandar correos reales por accidente en
+# desarrollo local puro. PERO si ya pusiste un proveedor real (Brevo, etc.)
+# en tu .env, esos valores tienen prioridad — así el envío real (Fase 2)
+# funciona aunque sigas usando settings.dev en el piloto/demo, sin tener
+# que activar config.settings.prod (que trae HTTPS obligatorio, 2FA
+# forzado en el admin, etc. — no listo todavía para el pitch).
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "mailhog"
-EMAIL_PORT = 1025
-EMAIL_USE_TLS = False
+EMAIL_HOST = env("EMAIL_HOST", default="mailhog")
+EMAIL_PORT = env.int("EMAIL_PORT", default=1025)
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=False)
 
 # En dev los tenants usan hostnames tipo "pyme-piloto.localhost" servidos
 # por runserver en el puerto 8000, sin TLS.
