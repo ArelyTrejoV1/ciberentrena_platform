@@ -16,6 +16,7 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 SHARED_APPS = [
     "django_tenants",
+    "apps.core",
     "apps.tenants",
     "apps.accounts",
     "apps.audit",
