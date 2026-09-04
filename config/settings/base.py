@@ -98,6 +98,12 @@ DATABASES = {
 
 AUTH_USER_MODEL = "accounts.Usuario"
 
+# Sin esto, Django manda a /accounts/profile/ (default de Django, no de este
+# proyecto) después de un login exitoso — esa ruta no existe aquí, así que
+# daba 404 justo después de iniciar sesión correctamente.
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "dashboard:lista"
+
 OTP_ADMIN_ENFORCED = False
 
 AUTH_PASSWORD_VALIDATORS = [
