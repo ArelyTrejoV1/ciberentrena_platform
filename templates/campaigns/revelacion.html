@@ -5,29 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Esto fue un simulacro — CiberEntrena</title>
+  {% include "_estilos.html" %}
   <style>
-    body { font-family: Arial, Helvetica, sans-serif; background: #0f2027; margin: 0; padding: 0; color: #eee; }
-    .caja { max-width: 480px; margin: 50px auto; background: #16323f; border-radius: 8px;
-            padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
-    .icono { font-size: 40px; text-align: center; }
-    h1 { text-align: center; font-size: 22px; margin: 10px 0 4px; color: #ffd166; }
-    p.sub { text-align: center; color: #cfd8dc; font-size: 14px; margin-top: 0; }
-    h2 { font-size: 15px; margin-top: 28px; color: #fff; border-bottom: 1px solid #2c4a58; padding-bottom: 6px; }
-    ul { padding-left: 20px; }
-    li { margin-bottom: 8px; font-size: 14px; line-height: 1.4; color: #dcdcdc; }
-    .tranquilidad { margin-top: 24px; background: #12242c; border-radius: 6px; padding: 14px 16px;
-                    font-size: 13px; color: #a9c9d6; }
-    .pie { text-align: center; font-size: 11px; color: #6d8896; margin-top: 24px; }
+    body.ce.ce-invertido { display: flex; min-height: 100vh; align-items: center; justify-content: center;
+                            padding: 24px; }
+    .ce-revelacion { max-width: 480px; width: 100%; }
+    .ce-revelacion__marca { display: flex; justify-content: center; margin-bottom: 28px; }
+    .ce-revelacion__marca .ce-logo__marca { width: 40px; height: 40px; }
+    .ce-revelacion__marca .ce-logo__texto { font-size: 20px; }
+    h1.ce-revelacion__titulo { text-align: center; font-size: 22px; font-weight: 800;
+                                letter-spacing: -0.01em; margin: 0 0 8px; }
+    p.ce-revelacion__sub { text-align: center; color: var(--ce-gris); font-size: 14px; margin: 0 0 28px; }
+    h2.ce-revelacion__seccion { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;
+                                 margin: 0 0 12px; border-bottom: 1px solid var(--ce-linea); padding-bottom: 8px; }
+    ul.ce-revelacion__lista { padding-left: 18px; margin: 0 0 24px; }
+    ul.ce-revelacion__lista li { margin-bottom: 8px; font-size: 14px; line-height: 1.5; }
+    .ce-revelacion__consejo { border: 1px solid var(--ce-linea); border-radius: var(--ce-radio);
+                               padding: 16px 18px; font-size: 13px; line-height: 1.5; color: var(--ce-gris); }
+    .ce-revelacion__pie { text-align: center; font-size: 11px; color: var(--ce-gris); margin-top: 24px; }
   </style>
 </head>
-<body>
-  <div class="caja">
-    <div class="icono">🎣</div>
-    <h1>¡Esto fue un simulacro de phishing!</h1>
-    <p class="sub">No se guardó ningún dato que hayas escrito. Fue un ejercicio de {{ plantilla.categoria|title }} para practicar cómo detectar estos intentos.</p>
+<body class="ce ce-invertido">
+  <div class="ce-revelacion">
+    <div class="ce-revelacion__marca">{% include "_logo.html" %}</div>
+    <h1 class="ce-revelacion__titulo">Esto fue un simulacro de phishing</h1>
+    <p class="ce-revelacion__sub">
+      No se guardó ningún dato que hayas escrito. Fue un ejercicio de
+      {{ plantilla.categoria|title }} para practicar cómo detectar estos intentos.
+    </p>
 
-    <h2>Señales de alerta que tenía este mensaje</h2>
-    <ul>
+    <h2 class="ce-revelacion__seccion">Señales de alerta que tenía este mensaje</h2>
+    <ul class="ce-revelacion__lista">
       {% for senal in plantilla.senales_alerta %}
         <li>{{ senal }}</li>
       {% empty %}
@@ -35,14 +43,14 @@
       {% endfor %}
     </ul>
 
-    <div class="tranquilidad">
+    <div class="ce-revelacion__consejo">
       No pasa nada: a esto se dedica este ejercicio, a que la próxima vez lo
       identifiques antes de dar clic. Ante un mensaje real así, repórtalo a tu
       equipo de TI o al área que lo emitió (banco, SAT, RH) por su canal oficial
       — nunca por el link del mensaje.
     </div>
 
-    <div class="pie">CiberEntrena — simulacro autorizado por tu empresa</div>
+    <div class="ce-revelacion__pie">CiberEntrena — simulacro autorizado por tu empresa</div>
   </div>
 </body>
 </html>

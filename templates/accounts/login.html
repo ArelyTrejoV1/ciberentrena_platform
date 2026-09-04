@@ -1,15 +1,53 @@
 <!doctype html>
 <html lang="es-mx">
-<head><meta charset="utf-8"><title>CiberEntrena — Iniciar sesión</title></head>
-<body>
-  <h1>CiberEntrena</h1>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Entrar</button>
-  </form>
-  {% if form.errors %}
-    <p>Usuario o contraseña incorrectos.</p>
-  {% endif %}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CiberEntrena — Iniciar sesión</title>
+  {% include "_estilos.html" %}
+  <style>
+    body.ce { display: flex; min-height: 100vh; align-items: center; justify-content: center; padding: 24px; }
+    .ce-login { max-width: 340px; width: 100%; }
+    .ce-login__marca { display: flex; justify-content: center; margin-bottom: 32px; }
+    .ce-login__marca .ce-logo__marca { width: 34px; height: 34px; }
+    .ce-login__marca .ce-logo__texto { font-size: 18px; }
+    h1.ce-login__titulo { font-size: 15px; font-weight: 600; text-align: center;
+                           color: var(--ce-gris); margin: 0 0 24px; text-transform: uppercase;
+                           letter-spacing: 0.06em; }
+    .ce-login label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase;
+                       letter-spacing: 0.04em; color: var(--ce-gris); margin-bottom: 6px; }
+    .ce-login .ce-campo { margin-bottom: 18px; }
+    .ce-login input[type="text"], .ce-login input[type="password"] {
+      width: 100%; padding: 11px 12px; border: 1px solid var(--ce-negro);
+      border-radius: var(--ce-radio); font-size: 14px; background: var(--ce-blanco);
+      color: var(--ce-negro); font-family: inherit;
+    }
+    .ce-login button { width: 100%; margin-top: 6px; padding: 12px; font-size: 14px; cursor: pointer; }
+    .ce-login__error { background: var(--ce-negro); color: var(--ce-blanco); font-size: 13px;
+                        padding: 10px 12px; border-radius: var(--ce-radio); margin-bottom: 18px; }
+  </style>
+</head>
+<body class="ce">
+  <div class="ce-login">
+    <div class="ce-login__marca">{% include "_logo.html" %}</div>
+    <h1 class="ce-login__titulo">Iniciar sesión</h1>
+
+    {% if form.errors %}
+      <div class="ce-login__error">Usuario o contraseña incorrectos.</div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="ce-campo">
+        <label for="{{ form.username.id_for_label }}">Usuario</label>
+        {{ form.username }}
+      </div>
+      <div class="ce-campo">
+        <label for="{{ form.password.id_for_label }}">Contraseña</label>
+        {{ form.password }}
+      </div>
+      <button class="ce-boton" type="submit">Entrar</button>
+    </form>
+  </div>
 </body>
 </html>

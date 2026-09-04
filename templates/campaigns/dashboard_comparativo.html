@@ -1,19 +1,21 @@
 {% extends "campaigns/dashboard_base.html" %}
+{% block nav_comparativo %}activa{% endblock %}
 {% block titulo %}Antes / después — CiberEntrena{% endblock %}
 {% block contenido %}
-  <h1>Medición antes / después de capacitación</h1>
-  <p style="color:#556; font-size:14px;">
+  <p class="ce-eyebrow">Medición</p>
+  <h1>Antes / después de la capacitación</h1>
+  <p style="color: var(--ce-gris); font-size: 14px; max-width: 640px;">
     Compara la tasa de clics entre rondas de la misma serie (campo <em>ronda</em> de cada
     campaña) para ver si bajó después de que el personal recibió retroalimentación.
   </p>
 
   {% if mejora is not None %}
-    <div class="tarjeta">
+    <div class="ce-tarjeta">
       {% if mejora > 0 %}
-        <strong style="color:#1e7d32;">Mejora de {{ mejora }} puntos porcentuales</strong>
+        <strong>Mejora de {{ mejora }} puntos porcentuales</strong>
         en la tasa de clics entre la primera y la última campaña con datos.
       {% elif mejora < 0 %}
-        <strong style="color:#a30000;">La tasa de clics subió {{ mejora|cut:"-" }} puntos porcentuales</strong>
+        <strong>La tasa de clics subió {{ mejora|cut:"-" }} puntos porcentuales</strong>
         entre la primera y la última campaña con datos — vale la pena reforzar la capacitación.
       {% else %}
         La tasa de clics no cambió entre la primera y la última campaña con datos.
@@ -22,9 +24,9 @@
   {% endif %}
 
   {% if not filas %}
-    <div class="tarjeta">Todavía no hay campañas para comparar.</div>
+    <div class="ce-tarjeta">Todavía no hay campañas para comparar.</div>
   {% else %}
-    <table>
+    <table class="ce-tabla">
       <thead>
         <tr>
           <th>Ronda</th>
@@ -38,10 +40,20 @@
         {% for fila in filas %}
           <tr>
             <td>{{ fila.campana.ronda }}</td>
-            <td><a href="{% url 'dashboard:detalle' fila.campana.id %}">{{ fila.campana.nombre }}</a></td>
+            <td><a href="{% url 'dashboard:detalle' fila.campana.id %}" style="color:inherit;">{{ fila.campana.nombre }}</a></td>
             <td>{{ fila.campana.fecha_creacion|date:"d/m/Y" }}</td>
-            <td><span class="barra-fondo"><span class="barra" style="width: {{ fila.tasa_apertura }}%"></span></span> <span class="pct">{{ fila.tasa_apertura }}%</span></td>
-            <td><span class="barra-fondo"><span class="barra" style="width: {{ fila.tasa_clic }}%"></span></span> <span class="pct">{{ fila.tasa_clic }}%</span></td>
+            <td>
+              <span class="ce-medidor">
+                <span class="ce-medidor__pista"><span class="ce-medidor__relleno" style="width: {{ fila.tasa_apertura }}%"></span></span>
+                <span class="ce-medidor__pct">{{ fila.tasa_apertura }}%</span>
+              </span>
+            </td>
+            <td>
+              <span class="ce-medidor">
+                <span class="ce-medidor__pista"><span class="ce-medidor__relleno ce-medidor__relleno--riesgo" style="width: {{ fila.tasa_clic }}%"></span></span>
+                <span class="ce-medidor__pct">{{ fila.tasa_clic }}%</span>
+              </span>
+            </td>
           </tr>
         {% endfor %}
       </tbody>

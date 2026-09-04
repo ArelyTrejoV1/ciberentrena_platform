@@ -1,15 +1,17 @@
 {% extends "campaigns/dashboard_base.html" %}
+{% block nav_campanas %}activa{% endblock %}
 {% block titulo %}Campañas — CiberEntrena{% endblock %}
 {% block contenido %}
+  <p class="ce-eyebrow">Simulacros</p>
   <h1>Campañas de simulacro</h1>
 
   {% if not filas %}
-    <div class="tarjeta">
+    <div class="ce-tarjeta">
       Todavía no hay campañas en este tenant. Genera una con
       <code>python manage.py tenant_command generar_campana_demo --schema=&lt;tu-schema&gt;</code>.
     </div>
   {% else %}
-    <table>
+    <table class="ce-tabla">
       <thead>
         <tr>
           <th>Campaña</th>
@@ -27,16 +29,20 @@
             <td>{{ fila.campana.nombre }}</td>
             <td>{{ fila.campana.ronda }}</td>
             <td>{{ fila.campana.fecha_creacion|date:"d/m/Y H:i" }}</td>
-            <td>{% if fila.campana.fecha_envio %}{{ fila.campana.fecha_envio|date:"d/m/Y H:i" }}{% else %}<span class="badge pendiente">sin enviar</span>{% endif %}</td>
+            <td>{% if fila.campana.fecha_envio %}{{ fila.campana.fecha_envio|date:"d/m/Y H:i" }}{% else %}<span class="ce-badge ce-badge--pendiente">sin enviar</span>{% endif %}</td>
             <td>
-              <span class="barra-fondo"><span class="barra" style="width: {{ fila.tasa_apertura }}%"></span></span>
-              <span class="pct">{{ fila.tasa_apertura }}%</span>
+              <span class="ce-medidor">
+                <span class="ce-medidor__pista"><span class="ce-medidor__relleno" style="width: {{ fila.tasa_apertura }}%"></span></span>
+                <span class="ce-medidor__pct">{{ fila.tasa_apertura }}%</span>
+              </span>
             </td>
             <td>
-              <span class="barra-fondo"><span class="barra" style="width: {{ fila.tasa_clic }}%"></span></span>
-              <span class="pct">{{ fila.tasa_clic }}%</span>
+              <span class="ce-medidor">
+                <span class="ce-medidor__pista"><span class="ce-medidor__relleno ce-medidor__relleno--riesgo" style="width: {{ fila.tasa_clic }}%"></span></span>
+                <span class="ce-medidor__pct">{{ fila.tasa_clic }}%</span>
+              </span>
             </td>
-            <td><a class="boton" href="{% url 'dashboard:detalle' fila.campana.id %}">Ver detalle</a></td>
+            <td><a class="ce-boton" href="{% url 'dashboard:detalle' fila.campana.id %}">Ver detalle</a></td>
           </tr>
         {% endfor %}
       </tbody>

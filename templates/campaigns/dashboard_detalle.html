@@ -1,17 +1,33 @@
 {% extends "campaigns/dashboard_base.html" %}
+{% block nav_campanas %}activa{% endblock %}
 {% block titulo %}{{ campana.nombre }} — CiberEntrena{% endblock %}
 {% block contenido %}
-  <p><a href="{% url 'dashboard:lista' %}">&larr; Volver a campañas</a></p>
+  <p><a class="ce-enlace-volver" href="{% url 'dashboard:lista' %}">&larr; Volver a campañas</a></p>
+  <p class="ce-eyebrow">Ronda {{ campana.ronda }}</p>
   <h1>{{ campana.nombre }}</h1>
 
-  <div class="tarjeta">
-    <strong>{{ total }}</strong> mensajes &middot;
-    <strong>{{ tasa_apertura }}%</strong> abrieron &middot;
-    <strong>{{ tasa_clic }}%</strong> cayeron (hicieron clic) &middot;
-    <strong>{{ tasa_dato }}%</strong> llegaron a "enviar" datos en la página falsa
+  <div class="ce-tarjeta">
+    <div class="ce-stat">
+      <div class="ce-stat__item">
+        <div class="ce-stat__valor">{{ total }}</div>
+        <div class="ce-stat__etiqueta">Mensajes</div>
+      </div>
+      <div class="ce-stat__item">
+        <div class="ce-stat__valor">{{ tasa_apertura }}%</div>
+        <div class="ce-stat__etiqueta">Abrieron</div>
+      </div>
+      <div class="ce-stat__item">
+        <div class="ce-stat__valor">{{ tasa_clic }}%</div>
+        <div class="ce-stat__etiqueta">Cayeron (clic)</div>
+      </div>
+      <div class="ce-stat__item">
+        <div class="ce-stat__valor">{{ tasa_dato }}%</div>
+        <div class="ce-stat__etiqueta">Enviaron datos</div>
+      </div>
+    </div>
   </div>
 
-  <table>
+  <table class="ce-tabla">
     <thead>
       <tr>
         <th>Empleado</th>
@@ -29,10 +45,10 @@
           <td>{{ m.empleado.usuario.get_full_name|default:m.empleado.usuario.username }}</td>
           <td>{{ m.empleado.departamento }}</td>
           <td>{{ m.plantilla.clave }}</td>
-          <td>{% if m.enviado_en %}{{ m.enviado_en|date:"d/m H:i" }}{% else %}<span class="badge pendiente">—</span>{% endif %}</td>
-          <td>{% if m.abierto %}<span class="badge si">Sí</span>{% else %}<span class="badge no">No</span>{% endif %}</td>
-          <td>{% if m.cayo %}<span class="badge si">Sí</span>{% elif m.cayo is None %}<span class="badge pendiente">—</span>{% else %}<span class="badge no">No</span>{% endif %}</td>
-          <td>{% if m.dato_ingresado %}<span class="badge si">Sí</span>{% else %}<span class="badge no">No</span>{% endif %}</td>
+          <td>{% if m.enviado_en %}{{ m.enviado_en|date:"d/m H:i" }}{% else %}<span class="ce-badge ce-badge--pendiente">—</span>{% endif %}</td>
+          <td>{% if m.abierto %}<span class="ce-badge ce-badge--si">Sí</span>{% else %}<span class="ce-badge ce-badge--no">No</span>{% endif %}</td>
+          <td>{% if m.cayo %}<span class="ce-badge ce-badge--si">Sí</span>{% elif m.cayo is None %}<span class="ce-badge ce-badge--pendiente">—</span>{% else %}<span class="ce-badge ce-badge--no">No</span>{% endif %}</td>
+          <td>{% if m.dato_ingresado %}<span class="ce-badge ce-badge--si">Sí</span>{% else %}<span class="ce-badge ce-badge--no">No</span>{% endif %}</td>
         </tr>
       {% endfor %}
     </tbody>

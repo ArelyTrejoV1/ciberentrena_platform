@@ -1,0 +1,85 @@
+<style>
+  /* Sistema visual CiberEntrena — blanco y negro, minimalista.
+     Compartido por dashboard, revelación y login vía la etiqueta "include".
+     La página falsa del simulacro (pagina_falsa.html) NO usa esto a
+     propósito: debe seguir pareciendo un mensaje ajeno/urgente, no
+     una pantalla con marca propia — ver el comentario en ese archivo. */
+  :root {
+    --ce-negro: #0a0a0a;
+    --ce-blanco: #ffffff;
+    --ce-fondo: #fafafa;
+    --ce-linea: #d9d9d9;
+    --ce-linea-suave: #ececec;
+    --ce-gris: #6b6b6b;
+    --ce-radio: 2px;
+  }
+  * { box-sizing: border-box; }
+  body.ce {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    color: var(--ce-negro);
+    background: var(--ce-blanco);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Variante invertida (blanco sobre negro) — se usa en la revelación,
+     el "quítate la máscara" del simulacro. Sigue siendo blanco y negro,
+     solo en el otro sentido. */
+  body.ce.ce-invertido {
+    --ce-negro: #ffffff;
+    --ce-blanco: #0a0a0a;
+    --ce-fondo: #161616;
+    --ce-linea: #3a3a3a;
+    --ce-linea-suave: #262626;
+    --ce-gris: #a6a6a6;
+  }
+
+  .ce-logo { display: inline-flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; }
+  .ce-logo__marca { width: 26px; height: 26px; color: inherit; flex-shrink: 0; }
+  .ce-logo__texto { font-size: 16px; letter-spacing: 0.01em; font-weight: 400; color: inherit; }
+  .ce-logo__texto strong { font-weight: 800; }
+
+  .ce-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+                color: var(--ce-gris); font-weight: 600; }
+
+  .ce-tarjeta { background: var(--ce-blanco); border: 1px solid var(--ce-negro);
+                border-radius: var(--ce-radio); padding: 20px 24px; margin-bottom: 20px; }
+
+  .ce-tabla { width: 100%; border-collapse: collapse; }
+  .ce-tabla thead th { text-align: left; font-size: 11px; text-transform: uppercase;
+                        letter-spacing: 0.08em; color: var(--ce-gris); font-weight: 700;
+                        padding: 0 14px 10px; border-bottom: 2px solid var(--ce-negro); }
+  .ce-tabla tbody td { padding: 13px 14px; font-size: 14px; border-bottom: 1px solid var(--ce-linea-suave); }
+  .ce-tabla tbody tr:last-child td { border-bottom: none; }
+  .ce-tabla tbody tr:hover { background: var(--ce-fondo); }
+
+  .ce-badge { display: inline-block; padding: 3px 10px; border-radius: 999px;
+              font-size: 11px; font-weight: 700; letter-spacing: 0.02em; }
+  .ce-badge--si { background: var(--ce-negro); color: var(--ce-blanco); }
+  .ce-badge--no { background: transparent; color: var(--ce-negro); border: 1px solid var(--ce-negro); }
+  .ce-badge--pendiente { background: transparent; color: var(--ce-gris); border: 1px dashed var(--ce-linea); }
+
+  .ce-medidor { display: inline-flex; align-items: center; gap: 8px; }
+  .ce-medidor__pista { width: 120px; height: 8px; border-radius: 999px; background: var(--ce-linea-suave);
+                        overflow: hidden; }
+  .ce-medidor__relleno { display: block; height: 100%; background: var(--ce-negro); }
+  /* Textura a rayas para distinguir "cayó" (riesgo) de "apertura" (neutral)
+     sin usar color — ver dataviz: identidad nunca solo por color. */
+  .ce-medidor__relleno--riesgo {
+    background-image: repeating-linear-gradient(135deg, var(--ce-negro) 0 3px, #4d4d4d 3px 6px);
+  }
+  .ce-medidor__pct { font-size: 12px; color: var(--ce-gris); font-variant-numeric: tabular-nums; min-width: 34px; }
+
+  .ce-boton { display: inline-block; background: var(--ce-negro); color: var(--ce-blanco);
+              padding: 9px 16px; border-radius: var(--ce-radio); text-decoration: none;
+              font-size: 13px; font-weight: 600; border: 1px solid var(--ce-negro); }
+  .ce-boton:hover { background: var(--ce-blanco); color: var(--ce-negro); }
+
+  .ce-stat { display: flex; flex-wrap: wrap; gap: 32px; }
+  .ce-stat__item { min-width: 120px; }
+  .ce-stat__valor { font-size: 30px; font-weight: 800; letter-spacing: -0.01em; line-height: 1; }
+  .ce-stat__etiqueta { margin-top: 6px; font-size: 12px; color: var(--ce-gris);
+                        text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .ce-enlace-volver { font-size: 13px; color: var(--ce-gris); text-decoration: none; }
+  .ce-enlace-volver:hover { color: var(--ce-negro); }
+</style>
