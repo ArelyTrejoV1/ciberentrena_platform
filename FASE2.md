@@ -65,9 +65,14 @@ pitch:
 ```bash
 docker compose exec web python manage.py tenant_command generar_campana_demo \
   --schema=pyme_piloto \
-  --correos=tu_correo+1@gmail.com,tu_correo+2@gmail.com,tu_correo+3@gmail.com
+  --correos=rogespino87@gmail.com,arelygguadalupe@gmail.com,emtrejo1327@gmail.com
 ```
-
+```
+docker compose exec web python manage.py tenant_command generar_campana_demo \
+  --schema=pyme_piloto \
+  --correos=rogespino87@gmail.com,arelygguadalupe@gmail.com,emtrejo1327@gmail.com \
+  --nombre="Demo final pitch"
+```
 (El truco `tu_correo+1@gmail.com` funciona en Gmail: llega a la misma
 bandeja que `tu_correo@gmail.com` pero cuentan como direcciones
 distintas — perfecto para simular 3 empleados con una sola cuenta.)
